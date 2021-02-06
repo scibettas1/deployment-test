@@ -4,8 +4,13 @@ const db = require("../models");
 // This file empties the Books collection and inserts the books below
 
 mongoose.connect(
-  process.env.MONGODB_URI ||
-  "mongodb://localhost/reactreadinglist"
+  process.env.MONGODB_URI || 'mongodb+srv://fitness:Password123@cluster0.ez1li.mongodb.net/deployment-test?retryWrites=true&w=majority',
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+  }
 );
 
 const bookSeed = [
