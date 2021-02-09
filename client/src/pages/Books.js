@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import DeleteBtn from "../components/DeleteBtn";
+import SaveBtn from "../components/SaveBtn";
 import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
 import { Col, Row, Container } from "../components/Grid";
-import { List } from "../components/List";
+import { List, ListItem } from "../components/List";
 import { Input, FormBtn } from "../components/Form";
 
 function Books() {
@@ -17,15 +17,15 @@ function Books() {
   function loadBooks() {
     API.getBookTitle(title)
       .then(res => {
-        setBookResults(res.data)
+        setBookResults(res.data.items)
         console.log(bookResults)
-        console.log(bookResults.items[0].volumeInfo.totalItems)
-        console.log(bookResults.items[0].volumeInfo.title)
-        console.log(bookResults.items[0].volumeInfo.authors[0])
-        console.log(bookResults.items[0].volumeInfo.categories[0])
-        console.log(bookResults.items[0].volumeInfo.description)
-        console.log(bookResults.items[0].volumeInfo.publishedDate)
-        console.log(bookResults.items[0].volumeInfo.imageLinks.thumbnail)
+        console.log(bookResults.volumeInfo.totalItems)
+        console.log(bookResults.volumeInfo.title)
+        console.log(bookResults.volumeInfo.authors[0])
+        console.log(bookResults.volumeInfo.categories[0])
+        console.log(bookResults.volumeInfo.description)
+        console.log(bookResults.volumeInfo.publishedDate)
+        console.log(bookResults.volumeInfo.imageLinks.thumbnail)
       }
       )
       .catch(err => console.log(err));
@@ -37,15 +37,17 @@ function Books() {
   //     .then(res => loadBooks())
   //     .catch(err => console.log(err));
   // }
-  // function saveBook() {
-  //   API.saveBook({
-  //     title: formObject.title,
-  //     author: formObject.author,
-  //     synopsis: formObject.synopsis
-  //   })
-  //     .then(res => loadBooks())
-  //     .catch(err => console.log(err));
-  // }
+  
+  function saveBook(book) {
+    console.log(book)
+    API.saveBook({
+      title: book.volumeInfo.title,
+      author: book.volumeInfo.author,
+      synopsis: book.volumeInfo.description
+    })
+      .then(res => loadBooks())
+      .catch(err => console.log(err));
+  }
 
   // Handles updating component state when the user types into the input field
   function handleInputChange(event) {
@@ -61,7 +63,7 @@ function Books() {
       loadBooks()
     }
   };
-console.log(bookResults.items)
+
   return (
     <Container fluid>
       <Row>
@@ -91,19 +93,23 @@ console.log(bookResults.items)
         <Col size="md-12">
           {bookResults.length ? (
             <List>
-              {bookResults.items.map(book => {
-                console.log(book)
+              {bookResults.map(book => {
+                console.log(book.volumeInfo.title)
                     return (
+                      <ListItem>
                       <strong>
-                      {book.title}
+                      {book.volumeInfo.title} by {book.volumeInfo.authors}
                     </strong>
+                    <SaveBtn onClick={() => saveBook(book)}/>
+                    </ListItem>
                     )
-                    
                     })}
             </List>
+
           ) : (
               <h3>No Results to Display</h3>
             )}
+                        <br />
         </Col>
       </Row>
     </Container>
