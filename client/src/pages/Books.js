@@ -30,13 +30,6 @@ function Books() {
       )
       .catch(err => console.log(err));
   };
-
-  // Deletes a book from the database with a given id, then reloads books from the db
-  // function deleteBook(id) {
-  //   API.deleteBook(id)
-  //     .then(res => loadBooks())
-  //     .catch(err => console.log(err));
-  // }
   
   function saveBook(book) {
     console.log(book)

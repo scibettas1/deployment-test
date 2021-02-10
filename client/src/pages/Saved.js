@@ -19,31 +19,37 @@ loadBooks()
   //    setFormObject(...formObject, {[name]:value}) //...formObject preserves the info so it doesn't get overwritten
   //  }
 
-  //  handleButtonClick = (event) => {
-  //   event.preventDefault();
-  //   if (formObject.title && formObject.author) {
-  //     API.saveBook({
-  //       title: formObject.title,
-  //       autor: formObject.author,
-  //       synopsis: formObject.synopsis
-  //     })
-  //     .then(() => setFormObject({
-  //       title:"",
-  //       author: "",
-  //       synopsis: ""
-  //     }))
-  //   }
-  //  }
+  // //  handleButtonClick = (event) => {
+  // //   event.preventDefault();
+  // //   if (formObject.title && formObject.author) {
+  // //         API.deleteBook(id)
+  //     .then(res => 
+  //       loadBooks(res.data)
+  //       )
+  //     .catch(err => console.log(err));
+  // }
+  // //   }
+  // //  }
+
+  // Deletes a book from the database with a given id, then reloads books from the db
+  function deleteBook(id) {
+    //res is not defined... WHY???
+    API.deleteBook(id)
+      .then(res => 
+        loadBooks(res.data)
+        )
+      .catch(err => console.log(err));
+  }
 
     function loadBooks() {
       // Add code here to get all books from the database and store them using setBooks
-    API.getBooks() //user input gets 
+    API.getBooks()
     .then(res =>
       setBooks(res.data)
       )
       .catch(err => console.log(err));
     };
-    console.log(books)
+    //console.log(books)
 ;
     return (
       <Container fluid>
@@ -61,13 +67,14 @@ loadBooks()
                         {book.title} by {book.author}
                       </strong>
                     </a>
-                    <DeleteBtn />
+                    <DeleteBtn onClick={() => deleteBook(book)} />
                   </ListItem>
                 ))}
               </List>
             ) : (
               <h3>No Results to Display</h3>
             )}
+            <br />
           </Col>
         </Row>
       </Container>
